@@ -1,0 +1,14 @@
+{% extends 'base.html' %} 
+{% block title %} 
+  Избранные авторы 
+{% endblock %}
+{% block content %}
+  {% include 'posts/includes/switcher.html' %}
+  <h1> {{ text }} </h1>
+  {% for post in page_obj %}
+    {% include 'includes/post.html' %}
+    {% if not forloop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
