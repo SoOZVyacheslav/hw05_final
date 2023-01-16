@@ -134,4 +134,4 @@ CACHES = {
     }
 }
 
-TEST_DIR = os.path.join(MEDIA_ROOT)
+TEST_DIR = os.path.join(MEDIA_ROOT, 'tmp')
