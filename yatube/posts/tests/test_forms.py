@@ -85,9 +85,14 @@ class PostFormTest(TestCase):
 
     def test_authorized_authorized_client_post_edit(self):
         """Проверка post_edit автором."""
+        post_count = Post.objects.count()
+        self.group_2 = Group.objects.create(
+            title='Тестовая группа_2',
+            slug='test_slug_2',
+            description='Тестовое описание_2')
         form_data = {
             'text': 'Тестовый отредактированый текст',
-            'group': self.group.id,
+            'group': self.group_2.id,
         }
         response = self.authorized_client.post(
             reverse(
@@ -96,6 +101,11 @@ class PostFormTest(TestCase):
             data=form_data,
             follow=True
         )
+        old_group_response = self.authorized_client.get(
+            reverse('posts:group_list', args=(self.group.slug,))
+        )
+        new_group_response = self.authorized_client.get(
+            reverse('posts:group_list', args=(self.group_2.slug,)))
         self.assertRedirects(
             response,
             reverse('posts:post_detail',
@@ -109,6 +119,12 @@ class PostFormTest(TestCase):
                 author=self.user
             ).exists()
         )
+        self.assertEqual(
+            post_count,
+            new_group_response.context['page_obj'].paginator.count == 1)
+        self.assertEqual(
+            post_count,
+            old_group_response.context['page_obj'].paginator.count == 0)
 
     def test_guest_client_post_create(self):
         """Проверка post_create гостем."""
@@ -124,6 +140,9 @@ class PostFormTest(TestCase):
         )
         redirect = reverse('login') + '?next=' + reverse(
             'posts:post_create')
+        new_post = Post.objects.last()
+        self.assertEqual(new_post.author, self.user)
+        self.assertEqual(new_post.group, self.group)
         self.assertEqual(Post.objects.count(), post_count)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertRedirects(
@@ -144,6 +163,9 @@ class PostFormTest(TestCase):
             reverse('posts:post_detail',
                     kwargs={'post_id': self.post.id})
         )
+        new_comment = Comment.objects.last()
+        self.assertEqual(new_comment.author, self.user)
+        self.assertEqual(new_comment.post, self.post)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertTrue(
             Comment.objects.filter(

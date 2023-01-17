@@ -12,23 +12,19 @@ def index(request):
     post_list = Post.objects.all()
     page_obj = paginator(post_list, request)
     context = {
-        'text': 'Последние обновления на сайте',
         'page_obj': page_obj,
     }
-    context.update(page_obj)
     return render(request, 'posts/index.html', context)
 
 
 def group_posts(request, slug):
     group = get_object_or_404(Group, slug=slug)
-    post_list = group.posts.order_by('-pub_date')
+    post_list = group.posts.all()
     page_obj = paginator(post_list, request)
     context = {
-        'text': 'Записи сообщества:',
         'group': group,
         'page_obj': page_obj,
     }
-    context.update(page_obj)
     return render(request, 'posts/group_list.html', context)
 
 
@@ -42,19 +38,16 @@ def profile(request, username):
         'page_obj': page_obj,
         'following': following,
     }
-    context.update(page_obj)
     return render(request, 'posts/profile.html', context)
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    count_posts = Post.objects.filter(author=post.author).count()
     comments = post.comments.all()
     form = CommentForm()
     context = {
         'form': form,
         'comments': comments,
-        'count_posts': count_posts,
         'post': post,
     }
     return render(request, 'posts/post_detail.html', context)
@@ -112,10 +105,8 @@ def follow_index(request):
     post_list = Post.objects.filter(author__following__user=request.user)
     page_obj = paginator(post_list, request)
     context = {
-        'text': 'Избранные авторы',
         'page_obj': page_obj
     }
-    context.update(page_obj)
     return render(request, 'posts/follow.html', context)
 
 

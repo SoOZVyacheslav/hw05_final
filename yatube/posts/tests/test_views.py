@@ -228,12 +228,14 @@ class FollowViewTest(TestCase):
         self.follower_client.force_login(self.follower)
 
     def test_follow(self):
+        """Проверка подписки на автора"""
         self.follower_client.get(
             reverse('posts:profile_follow',
                     kwargs={'username': self.user}))
         self.assertEqual(Follow.objects.all().count(), 1)
 
     def test_unfollow(self):
+        """Проверка отписки от автора"""
         self.follower_client.get(
             reverse('posts:profile_follow',
                     kwargs={'username': self.user}))
