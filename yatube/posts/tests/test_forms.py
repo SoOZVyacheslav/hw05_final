@@ -85,7 +85,6 @@ class PostFormTest(TestCase):
 
     def test_authorized_authorized_client_post_edit(self):
         """Проверка post_edit автором."""
-        post_count = Post.objects.count()
         self.group_2 = Group.objects.create(
             title='Тестовая группа_2',
             slug='test_slug_2',
@@ -120,11 +119,9 @@ class PostFormTest(TestCase):
             ).exists()
         )
         self.assertEqual(
-            post_count,
-            new_group_response.context['page_obj'].paginator.count == 1)
+            new_group_response.context['page_obj'].paginator.count, 1)
         self.assertEqual(
-            post_count,
-            old_group_response.context['page_obj'].paginator.count == 0)
+            old_group_response.context['page_obj'].paginator.count, 0)
 
     def test_guest_client_post_create(self):
         """Проверка post_create гостем."""
