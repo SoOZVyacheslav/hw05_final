@@ -28,10 +28,10 @@
                     {{ error|escape }}
                   </div>
                 {% endfor %}
-            {% endif %}           
+            {% endif %}
             <form method="post" enctype="multipart/form-data">           
-              {% csrf_token %}          
-              {% for field in form %} 
+              {% csrf_token %}
+              {% for field in form %}
                 <div class="form-group row my-3" >
                   <label for="{{ field.id_for_label }}">
                     {{ field.label }}

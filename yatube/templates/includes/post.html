@@ -1,6 +1,6 @@
 {% load thumbnail %}
 <ul>
-  {% if not profile == 'True'%}
+  {% if not profile %}
   <li>
     Автор: {{ post.author.get_full_name }}
     <a href="{% url 'posts:profile' post.author %}">все посты пользователя</a>

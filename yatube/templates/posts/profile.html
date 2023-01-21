@@ -21,7 +21,7 @@
     {% endif %}
   </div> 
     {% for post in page_obj %}
-      {% include 'includes/post.html' %}
+      {% include 'includes/post.html' with profile=True %}
       <a href="{% url 'posts:post_detail' post.id %}">подробная информация</a>
       <br>
       {% if post.group %}   
