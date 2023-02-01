@@ -1,11 +1,13 @@
 import os
 
+from decouple import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = 'x!_#yr4$d23+sf6ox6h95c_sl_mrz%gbrqm@7&-hxg1b26k6#%'
+SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -16,7 +18,7 @@ ALLOWED_HOSTS = [
 
 INTERNAL_IPS = [
     '127.0.0.1',
-] 
+]
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
